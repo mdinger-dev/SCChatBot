@@ -10,6 +10,11 @@ namespace SCChatBot
 { 
     public partial class Form1 : Form
     {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
         WebSocket ws = new WebSocket("wss://connect-bot.classic.blizzard.com/v1/rpc/chat", "json");
 
         public int lastRequestId = 0;
@@ -35,9 +40,11 @@ namespace SCChatBot
             public Dictionary<string, string> payload { get; set; }
         }
 
-        public Form1()
+        public class SendChatMessage
         {
-            InitializeComponent();
+            public string command { get; set; }
+            public int request_id { get; set; }
+            public Dictionary<string, string> payload { get; set; }
         }
 
         //| Area  |  Code  |  Reason
@@ -82,7 +89,7 @@ namespace SCChatBot
 
             ws.OnMessage += (sender, e) =>
             {
-                MessageBox.Show(e.Data);
+                MessageBox.Show(e.Data, "Server response:");
             };
 
             ws.OnClose += (sender, e) =>
@@ -124,9 +131,6 @@ namespace SCChatBot
             var chatConnectEventJson = JsonConvert.SerializeObject(chatConnectEvent, Formatting.Indented);
 
             ws.Send(chatConnectionJson);
-
-
-
         }
 
         // Disconnects the bot from the gateway and chat channel
@@ -139,6 +143,19 @@ namespace SCChatBot
         public void ChatSendMessage()
         {
 
+            var sendChat = new SendChatMessage
+            {
+                command = "Botapichat.SendMessageRequest",
+                request_id = ++lastRequestId,
+                payload = new Dictionary<string, string>
+                {
+                    {"message", "Hey there!" }
+                }
+
+            };
+            var chatMessage = JsonConvert.SerializeObject(sendChat, Formatting.Indented);
+
+            ws.Send(chatMessage);
         }
 
         // Sends a chat message to one user in the channel
@@ -177,6 +194,11 @@ namespace SCChatBot
         private void button1_Click_1(object sender, EventArgs e)
         {
             ChatConnect();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            ChatSendMessage();
         }
     }
 }
