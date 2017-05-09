@@ -28,34 +28,59 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.btnConnect = new System.Windows.Forms.Button();
+            this.btnAuthConnect = new System.Windows.Forms.Button();
+            this.lblAuthConnection = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // btnConnect
+            // btnAuthConnect
             // 
-            this.btnConnect.Location = new System.Drawing.Point(306, 41);
-            this.btnConnect.Name = "btnConnect";
-            this.btnConnect.Size = new System.Drawing.Size(75, 23);
-            this.btnConnect.TabIndex = 0;
-            this.btnConnect.Text = "Connect";
-            this.btnConnect.UseVisualStyleBackColor = true;
-            this.btnConnect.Click += new System.EventHandler(this.button1_Click);
+            this.btnAuthConnect.Location = new System.Drawing.Point(309, 12);
+            this.btnAuthConnect.Name = "btnAuthConnect";
+            this.btnAuthConnect.Size = new System.Drawing.Size(75, 23);
+            this.btnAuthConnect.TabIndex = 0;
+            this.btnAuthConnect.Text = "Connect";
+            this.btnAuthConnect.UseVisualStyleBackColor = true;
+            this.btnAuthConnect.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // lblAuthConnection
+            // 
+            this.lblAuthConnection.AutoSize = true;
+            this.lblAuthConnection.Location = new System.Drawing.Point(249, 187);
+            this.lblAuthConnection.Name = "lblAuthConnection";
+            this.lblAuthConnection.Size = new System.Drawing.Size(0, 13);
+            this.lblAuthConnection.TabIndex = 1;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(309, 81);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 2;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click_1);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(396, 212);
-            this.Controls.Add(this.btnConnect);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.lblAuthConnection);
+            this.Controls.Add(this.btnAuthConnect);
             this.Name = "Form1";
             this.Text = "Form1";
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Button btnConnect;
+        private System.Windows.Forms.Button btnAuthConnect;
+        private System.Windows.Forms.Label lblAuthConnection;
+        private System.Windows.Forms.Button button1;
     }
 }
 

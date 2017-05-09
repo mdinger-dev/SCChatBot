@@ -3,16 +3,32 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using Newtonsoft.Json;
 using WebSocketSharp;
+using System.Threading;
+using System.IO;
 
 namespace SCChatBot
 { 
     public partial class Form1 : Form
     {
-        WebSocket ws = new WebSocket("wss://connect-bot.classic.blizzard.com/v1/rpc/chat");
+        WebSocket ws = new WebSocket("wss://connect-bot.classic.blizzard.com/v1/rpc/chat", "json");
 
         public int lastRequestId = 0;
 
         public class Auth
+        {
+            public string command { get; set; }
+            public int request_id { get; set; }
+            public Dictionary<string, string> payload { get; set; }
+        }
+
+        public class ChatConnection
+        {
+            public string command { get; set; }
+            public int request_id { get; set; }
+            public Dictionary<string, string> payload { get; set; }
+        }
+
+        public class ChatConnectEvent
         {
             public string command { get; set; }
             public int request_id { get; set; }
@@ -37,7 +53,10 @@ namespace SCChatBot
         // When connection is established, the client will need to send an authentication request with the API key:
         public void Authentication()
         {
-            ws.Connect();
+           
+
+            var apiKeyFile = @"C:\Users\mdinger\Desktop\ChatBotAPIKey.txt";
+            var apiKey = File.ReadAllText(apiKeyFile);
 
             var auth = new Auth
             {
@@ -45,16 +64,68 @@ namespace SCChatBot
                 request_id = ++lastRequestId,
                 payload = new Dictionary<string, string>
                 {
-                    { "api_key", "c2a55235c0b934c18df9fe2ffe77b0af815228baa5124a009b39bac1" }
+                    { "api_key", apiKey }
                 }
             };
             var authJson = JsonConvert.SerializeObject(auth, Formatting.Indented);
-            ws.Send(authJson);
+
+            ws.OnOpen += (sender, e) =>
+            {
+                ws.Send(authJson);
+               
+            };
+
+            ws.OnError += (sender, e) =>
+            {
+                MessageBox.Show(e.Message, "Error:");
+            };
+
+            ws.OnMessage += (sender, e) =>
+            {
+                MessageBox.Show(e.Data);
+            };
+
+            ws.OnClose += (sender, e) =>
+            {
+               if (e.Code == 1005)
+                {
+                    MessageBox.Show("Disconnected from the server. Please verify your API key is valid.", "Error:");
+                }
+            };
+
+            ws.Connect();
         }
 
         // Connect the bot to the gateway and chat channel
         public void ChatConnect()
         {
+
+
+            var chatConnect = new ChatConnection
+            {
+                command = "Botapichat.ConnectRequest",
+                request_id = ++lastRequestId,
+                payload = new Dictionary<string, string>
+                {
+                    
+                }
+            };
+            var chatConnectionJson = JsonConvert.SerializeObject(chatConnect, Formatting.Indented);
+
+            var chatConnectEvent = new ChatConnectEvent
+            {
+                command = "Botapichat.ConnectEventRequest",
+                request_id = ++lastRequestId,
+                payload = new Dictionary<string, string>
+                {
+                    {"channel", "Op Z3roFlaw" }
+                }
+            };
+            var chatConnectEventJson = JsonConvert.SerializeObject(chatConnectEvent, Formatting.Indented);
+
+            ws.Send(chatConnectionJson);
+
+
 
         }
 
@@ -99,9 +170,13 @@ namespace SCChatBot
 
         private void button1_Click(object sender, EventArgs e)
         {
-           Authentication();
-            var isAlive = ws.IsAlive;
-            MessageBox.Show(isAlive.ToString());
+            Authentication();
+            
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            ChatConnect();
         }
     }
 }
