@@ -1,4 +1,6 @@
-﻿namespace SCChatBot
+﻿using System.Windows.Forms;
+
+namespace SCChatBot
 {
     partial class Form1
     {
@@ -20,6 +22,10 @@
             base.Dispose(disposing);
         }
 
+        
+        
+        
+        
         #region Windows Form Designer generated code
 
         /// <summary>
@@ -28,23 +34,26 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.btnAuthConnect = new System.Windows.Forms.Button();
             this.lblAuthConnection = new System.Windows.Forms.Label();
             this.btnSendMessage = new System.Windows.Forms.Button();
             this.lblAuthConnectionStatus = new System.Windows.Forms.Label();
-            this.btnDisconnect = new System.Windows.Forms.Button();
+            this.btnChatDisconnect = new System.Windows.Forms.Button();
             this.txtBoxChatMessage = new System.Windows.Forms.TextBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.btnChatConnect = new System.Windows.Forms.Button();
+            this.listBoxUsersInChannel = new System.Windows.Forms.ListBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // btnAuthConnect
             // 
-            this.btnAuthConnect.Location = new System.Drawing.Point(371, 45);
+            this.btnAuthConnect.Location = new System.Drawing.Point(195, 12);
             this.btnAuthConnect.Name = "btnAuthConnect";
-            this.btnAuthConnect.Size = new System.Drawing.Size(99, 27);
+            this.btnAuthConnect.Size = new System.Drawing.Size(137, 27);
             this.btnAuthConnect.TabIndex = 0;
-            this.btnAuthConnect.Text = "Connect";
+            this.btnAuthConnect.Text = "WebSocket Authenticate";
             this.btnAuthConnect.UseVisualStyleBackColor = true;
             this.btnAuthConnect.Click += new System.EventHandler(this.btnAuthConnect_Click);
             // 
@@ -61,7 +70,7 @@
             this.btnSendMessage.Location = new System.Drawing.Point(371, 187);
             this.btnSendMessage.Name = "btnSendMessage";
             this.btnSendMessage.Size = new System.Drawing.Size(101, 27);
-            this.btnSendMessage.TabIndex = 3;
+            this.btnSendMessage.TabIndex = 4;
             this.btnSendMessage.Text = "Send Message";
             this.btnSendMessage.UseVisualStyleBackColor = true;
             this.btnSendMessage.Click += new System.EventHandler(this.btnSendMessage_Click);
@@ -75,22 +84,24 @@
             this.lblAuthConnectionStatus.TabIndex = 5;
             this.lblAuthConnectionStatus.Text = "Connection State:";
             // 
-            // btnDisconnect
+            // btnChatDisconnect
             // 
-            this.btnDisconnect.Location = new System.Drawing.Point(371, 78);
-            this.btnDisconnect.Name = "btnDisconnect";
-            this.btnDisconnect.Size = new System.Drawing.Size(99, 27);
-            this.btnDisconnect.TabIndex = 6;
-            this.btnDisconnect.Text = "Disconnect";
-            this.btnDisconnect.UseVisualStyleBackColor = true;
-            this.btnDisconnect.Click += new System.EventHandler(this.btnDisconnect_Click);
+            this.btnChatDisconnect.Location = new System.Drawing.Point(12, 55);
+            this.btnChatDisconnect.Name = "btnChatDisconnect";
+            this.btnChatDisconnect.Size = new System.Drawing.Size(99, 27);
+            this.btnChatDisconnect.TabIndex = 2;
+            this.btnChatDisconnect.Text = "Chat Disconnect";
+            this.btnChatDisconnect.UseVisualStyleBackColor = true;
+            this.btnChatDisconnect.Click += new System.EventHandler(this.btnDisconnect_Click);
             // 
             // txtBoxChatMessage
             // 
-            this.txtBoxChatMessage.Location = new System.Drawing.Point(131, 191);
+            this.txtBoxChatMessage.Location = new System.Drawing.Point(12, 191);
+            this.txtBoxChatMessage.MaxLength = 223;
             this.txtBoxChatMessage.Name = "txtBoxChatMessage";
-            this.txtBoxChatMessage.Size = new System.Drawing.Size(234, 20);
-            this.txtBoxChatMessage.TabIndex = 7;
+            this.txtBoxChatMessage.Size = new System.Drawing.Size(353, 20);
+            this.txtBoxChatMessage.TabIndex = 3;
+            this.txtBoxChatMessage.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtBoxChatMessage_KeyDown);
             // 
             // pictureBox1
             // 
@@ -102,20 +113,42 @@
             this.pictureBox1.TabIndex = 4;
             this.pictureBox1.TabStop = false;
             // 
+            // btnChatConnect
+            // 
+            this.btnChatConnect.Location = new System.Drawing.Point(12, 22);
+            this.btnChatConnect.Name = "btnChatConnect";
+            this.btnChatConnect.Size = new System.Drawing.Size(99, 27);
+            this.btnChatConnect.TabIndex = 1;
+            this.btnChatConnect.Text = "Chat Connect";
+            this.btnChatConnect.UseVisualStyleBackColor = true;
+            this.btnChatConnect.Click += new System.EventHandler(this.btnChatConnect_Click);
+            // 
+            // listBoxUsersInChannel
+            // 
+            this.listBoxUsersInChannel.FormattingEnabled = true;
+            this.listBoxUsersInChannel.Location = new System.Drawing.Point(129, 71);
+            this.listBoxUsersInChannel.Name = "listBoxUsersInChannel";
+            this.listBoxUsersInChannel.Size = new System.Drawing.Size(120, 95);
+            this.listBoxUsersInChannel.TabIndex = 9;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(482, 230);
+            this.Controls.Add(this.listBoxUsersInChannel);
+            this.Controls.Add(this.btnChatConnect);
             this.Controls.Add(this.txtBoxChatMessage);
-            this.Controls.Add(this.btnDisconnect);
+            this.Controls.Add(this.btnChatDisconnect);
             this.Controls.Add(this.lblAuthConnectionStatus);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.btnSendMessage);
             this.Controls.Add(this.lblAuthConnection);
             this.Controls.Add(this.btnAuthConnect);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "SC Chat Bot";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -129,8 +162,10 @@
         private System.Windows.Forms.Button btnSendMessage;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label lblAuthConnectionStatus;
-        private System.Windows.Forms.Button btnDisconnect;
+        private System.Windows.Forms.Button btnChatDisconnect;
         private System.Windows.Forms.TextBox txtBoxChatMessage;
+        private System.Windows.Forms.Button btnChatConnect;
+        private ListBox listBoxUsersInChannel;
     }
 }
 

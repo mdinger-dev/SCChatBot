@@ -18,35 +18,6 @@ namespace SCChatBot
 
         public int lastRequestId = 0;
 
-        public class Auth
-        {
-            public string command { get; set; }
-            public int request_id { get; set; }
-            public Dictionary<string, string> payload { get; set; }
-        }
-
-        public class ChatConnection
-        {
-            public string command { get; set; }
-            public int request_id { get; set; }
-            public Dictionary<string, string> payload { get; set; }
-        }
-
-        public class ChatDisconnection
-        {
-            public string command { get; set; }
-            public int request_id { get; set; }
-            public Dictionary<string, string> payload { get; set; }
-        }
-
-        public class SendChatMessage
-        {
-            public string command { get; set; }
-            public int request_id { get; set; }
-            public Dictionary<string, string> payload { get; set; }
-        }
-
-
         //| Area  |  Code  |  Reason
         //| 8     |   1    | Not connected to chat
         //| 8     |   2    | Bad request
@@ -62,8 +33,11 @@ namespace SCChatBot
         {
             var apiKeyFile = @"C:\Users\mdinger\Desktop\ChatBotAPIKey.txt";
             var apiKey = File.ReadAllText(apiKeyFile);
+            var messageSpacer = @"--------------------------------------------------------------";
+            var greenDot = @"C:\Users\mdinger\documents\visual studio 2017\Projects\SCChatBot\SCChatBot\Resources\GreenDot.png";
+            var redDot = @"C:\Users\mdinger\documents\visual studio 2017\Projects\SCChatBot\SCChatBot\Resources\RedDot.png";
 
-            var auth = new Auth
+            var auth = new MessageClasses.Auth
             {
                 command = "Botapiauth.AuthenticateRequest",
                 request_id = ++lastRequestId,
@@ -78,41 +52,43 @@ namespace SCChatBot
             {
                 ws.Send(authJson);
                 pictureBox1.Update();
-                pictureBox1.Load(@"C:\Users\mdinger\documents\visual studio 2017\Projects\SCChatBot\SCChatBot\Resources\GreenDot.png");
-                pictureBox1.Visible = true;
+                pictureBox1.Load(greenDot);
             };
 
             ws.OnError += (sender, e) =>
             {
+                Console.WriteLine(@"OnError - Server Response:");
                 Console.WriteLine(e.Message);
+                Console.WriteLine(messageSpacer);
             };
 
             ws.OnMessage += (sender, e) =>
             {
-               // RichTextBox rtbxServerResponse = new RichTextBox();
-                //rtbxServerResponse.AppendText(e.Data);
+
+                Console.WriteLine(@"OnMessage - Server Response:");
                 Console.WriteLine(e.Data);
-               // MessageBox.Show(e.Data, "Server response:");
-               
+                Console.WriteLine(messageSpacer);
+
+                var _items = new List<string> {"One", "Two"};
+                listBoxUsersInChannel.DataSource = _items;
             };
 
             ws.OnClose += (sender, e) =>
             {
-               if (e.Code == 1005)
-                {
-                    Console.WriteLine("Disconnected from the server. Please verify your API key is valid.");
-                }
+                Console.WriteLine(@"OnClose - WebSocket connection was closed:");
+                Console.WriteLine(e.Reason);
+                Console.WriteLine(messageSpacer);
+                pictureBox1.Load(redDot);
             };
 
             ws.Connect();
-            ChatConnect();
         }
 
         // Connect the bot to the gateway and chat channel
         public void ChatConnect()
         {
 
-            var chatConnect = new ChatConnection
+            var chatConnect = new MessageClasses.ChatConnection
             {
                 command = "Botapichat.ConnectRequest",
                 request_id = ++lastRequestId,
@@ -129,7 +105,7 @@ namespace SCChatBot
         // Disconnects the bot from the gateway and chat channel
         public void ChatDisconnect()
         {
-            var disc = new ChatDisconnection
+            var disc = new MessageClasses.ChatDisconnection
             {
                 command = "Botapichat.DisconnectRequest",
                 request_id = ++lastRequestId,
@@ -141,18 +117,16 @@ namespace SCChatBot
             var discJson = JsonConvert.SerializeObject(disc, Formatting.Indented);
 
             ws.Send(discJson);
-            pictureBox1.Update();
-            pictureBox1.Load(@"C:\Users\mdinger\documents\visual studio 2017\Projects\SCChatBot\SCChatBot\Resources\RedDot.png");
-            
+           
+           
         }
 
         // Sends a chat message to the channel
         public void ChatSendMessage()
         {
             var msg = txtBoxChatMessage.Text;
-            
 
-            var sendChat = new SendChatMessage
+            var sendChat = new MessageClasses.SendChatMessage
             {
                 command = "Botapichat.SendMessageRequest",
                 request_id = ++lastRequestId,
@@ -206,10 +180,26 @@ namespace SCChatBot
             ChatSendMessage();
         }
 
-        // Not working at the moment.
+        private void txtBoxChatMessage_KeyDown(object sender, KeyEventArgs e)
+        {
+
+            if (e.KeyCode == Keys.Enter)
+            {
+                if (txtBoxChatMessage.Text != String.Empty)
+                {
+                    ChatSendMessage();
+                }
+            }
+        }
+
         private void btnDisconnect_Click(object sender, EventArgs e)
         {
-            ChatDisconnect();
+           ChatDisconnect();
+        }
+
+        private void btnChatConnect_Click(object sender, EventArgs e)
+        {
+           ChatConnect();
         }
     }
 }
