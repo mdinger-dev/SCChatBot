@@ -2,7 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Windows.Forms;
+using Newtonsoft.Json.Linq;
 using WebSocketSharp;
 
 namespace SCChatBot
@@ -53,6 +56,7 @@ namespace SCChatBot
                 ws.Send(authJson);
                 pictureBox1.Update();
                 pictureBox1.Load(greenDot);
+                
             };
 
             ws.OnError += (sender, e) =>
@@ -68,9 +72,29 @@ namespace SCChatBot
                 Console.WriteLine(@"OnMessage - Server Response:");
                 Console.WriteLine(e.Data);
                 Console.WriteLine(messageSpacer);
+                
+                
+                JObject msg = JObject.Parse(e.Data);
+                var userJoinedEvent = (string)msg["command"];
 
-                var _items = new List<string> {"One", "Two"};
-                listBoxUsersInChannel.DataSource = _items;
+                if (userJoinedEvent == "Botapichat.UserUpdateEventRequest")
+                {
+                    var toonName = (string)msg["payload"]["toon_name"];
+
+                    var users = new List<string> { toonName };
+                    Console.WriteLine(toonName + " has joined the channel");
+
+                    txtBoxUsersInChannel = new TextBox();
+                    txtBoxUsersInChannel.AppendText(toonName);
+                    
+
+//                    listBoxUsersInChannel = new ListBox();
+//                    listBoxUsersInChannel.BeginUpdate();
+//                    listBoxUsersInChannel.DataSource = users;
+//                   // listBoxUsersInChannel.Items.AddRange(new object[]{users});
+//                    listBoxUsersInChannel.EndUpdate();
+                }
+               
             };
 
             ws.OnClose += (sender, e) =>
@@ -146,6 +170,7 @@ namespace SCChatBot
         public void ChatSendWhisper()
         {
 
+
         }
 
         // A message was posted to the channel
@@ -201,5 +226,6 @@ namespace SCChatBot
         {
            ChatConnect();
         }
+
     }
 }

@@ -44,6 +44,7 @@ namespace SCChatBot
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.btnChatConnect = new System.Windows.Forms.Button();
             this.listBoxUsersInChannel = new System.Windows.Forms.ListBox();
+            this.txtBoxUsersInChannel = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -131,11 +132,20 @@ namespace SCChatBot
             this.listBoxUsersInChannel.Size = new System.Drawing.Size(120, 95);
             this.listBoxUsersInChannel.TabIndex = 9;
             // 
+            // txtBoxUsersInChannel
+            // 
+            this.txtBoxUsersInChannel.Location = new System.Drawing.Point(280, 71);
+            this.txtBoxUsersInChannel.Multiline = true;
+            this.txtBoxUsersInChannel.Name = "txtBoxUsersInChannel";
+            this.txtBoxUsersInChannel.Size = new System.Drawing.Size(124, 95);
+            this.txtBoxUsersInChannel.TabIndex = 10;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(482, 230);
+            this.Controls.Add(this.txtBoxUsersInChannel);
             this.Controls.Add(this.listBoxUsersInChannel);
             this.Controls.Add(this.btnChatConnect);
             this.Controls.Add(this.txtBoxChatMessage);
@@ -166,6 +176,7 @@ namespace SCChatBot
         private System.Windows.Forms.TextBox txtBoxChatMessage;
         private System.Windows.Forms.Button btnChatConnect;
         private ListBox listBoxUsersInChannel;
+        private TextBox txtBoxUsersInChannel;
     }
 }
 
