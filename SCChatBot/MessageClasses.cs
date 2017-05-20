@@ -36,7 +36,7 @@ namespace SCChatBot
         {
             public string command { get; set; }
             public int request_id { get; set; }
-            public Dictionary<string, string> payload { get; set; }
+            public Dictionary<string, dynamic> payload { get; set; }
         }
     }
 }

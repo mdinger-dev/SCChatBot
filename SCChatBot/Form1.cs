@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Windows.Forms;
 using Newtonsoft.Json.Linq;
 using WebSocketSharp;
@@ -15,11 +14,17 @@ namespace SCChatBot
         public Form1()
         {
             InitializeComponent();
+            
         }
-
         WebSocket ws = new WebSocket("wss://connect-bot.classic.blizzard.com/v1/rpc/chat", "json");
 
         public int lastRequestId = 0;
+
+        public void Users()
+        {
+
+          
+        }
 
         //| Area  |  Code  |  Reason
         //| 8     |   1    | Not connected to chat
@@ -53,8 +58,7 @@ namespace SCChatBot
 
             ws.OnOpen += (sender, e) =>
             {
-                ws.Send(authJson);
-                pictureBox1.Update();
+                ws.Send(authJson);pictureBox1.Update();
                 pictureBox1.Load(greenDot);
                 
             };
@@ -75,26 +79,31 @@ namespace SCChatBot
                 
                 
                 JObject msg = JObject.Parse(e.Data);
+
                 var userJoinedEvent = (string)msg["command"];
+              
 
                 if (userJoinedEvent == "Botapichat.UserUpdateEventRequest")
                 {
                     var toonName = (string)msg["payload"]["toon_name"];
+                    var user_id = (int)msg["payload"]["user_id"];
+                    MessageBox.Show(user_id.ToString());
+                    //JArray msgArray = JArray.Parse(e.ToString());
+                    // var attribute = (string)msg["payload"]["attribute"];
+                    //MessageBox.Show(attribute);
 
-                    var users = new List<string> { toonName };
+
+                    // var users = new List<string> { toonName };
+
                     Console.WriteLine(toonName + " has joined the channel");
 
-                    txtBoxUsersInChannel = new TextBox();
-                    txtBoxUsersInChannel.AppendText(toonName);
-                    
 
 //                    listBoxUsersInChannel = new ListBox();
 //                    listBoxUsersInChannel.BeginUpdate();
-//                    listBoxUsersInChannel.DataSource = users;
-//                   // listBoxUsersInChannel.Items.AddRange(new object[]{users});
+//                    listBoxUsersInChannel.Items.AddRange(new object[]{"test", "test1"});
 //                    listBoxUsersInChannel.EndUpdate();
+
                 }
-               
             };
 
             ws.OnClose += (sender, e) =>
@@ -169,29 +178,23 @@ namespace SCChatBot
         // Sends a chat message to one user in the channel
         public void ChatSendWhisper()
         {
+            var msg = txtBoxChatWhisperMessage.Text;
 
+            var sendChat = new MessageClasses.SendChatWhisper
+            {
+                command = "Botapichat.SendWhisperRequest",
+                request_id = ++lastRequestId,
+                payload = new Dictionary<string, dynamic>
+                {
+                    {"message", msg},
+                    {"user_id", "2"}
+                }
+            };
 
-        }
+            var chatMessage = JsonConvert.SerializeObject(sendChat, Formatting.Indented);
 
-        // A message was posted to the channel
-        // Type is one of: Whisper, Channel, ServerInfo, ServerError, Emote
-        public void OnMessageEvent()
-        {
-
-        }
-
-        // A user has joined the current channel or got an update
-        // Flags are: Admin, Moderator, Speaker, MuteGlobal, MuteWhisper 
-        // Attributes are: ProgramId, Rate, Rank, Wins
-        public void OnUserUpdateEvent()
-        {
-
-        }
-
-        // A user in the current channel has left
-        public void OnUserLeaveEvent()
-        {
-
+            ws.Send(chatMessage);
+            txtBoxChatWhisperMessage.Text = string.Empty;
         }
 
         private void btnAuthConnect_Click(object sender, EventArgs e)
@@ -200,9 +203,18 @@ namespace SCChatBot
             
         }
 
-        private void btnSendMessage_Click(object sender, EventArgs e)
+        private void txtBoxChatWhisperMessage_KeyDown(object sender, KeyEventArgs e)
         {
-            ChatSendMessage();
+            if (e.KeyCode == Keys.Enter)
+            {
+                //Will disable the "ding" sound when hitting the Enter key to send chat.
+                e.SuppressKeyPress = true;
+
+                if (txtBoxChatWhisperMessage.Text != string.Empty)
+                {
+                    ChatSendWhisper();
+                }
+            }
         }
 
         private void txtBoxChatMessage_KeyDown(object sender, KeyEventArgs e)
@@ -210,7 +222,10 @@ namespace SCChatBot
 
             if (e.KeyCode == Keys.Enter)
             {
-                if (txtBoxChatMessage.Text != String.Empty)
+                //Will disable the "ding" sound when hitting the Enter key to send chat.
+                e.SuppressKeyPress = true;
+
+                if (txtBoxChatMessage.Text != string.Empty)
                 {
                     ChatSendMessage();
                 }
@@ -227,5 +242,14 @@ namespace SCChatBot
            ChatConnect();
         }
 
+        private void btnSendMessage_Click(object sender, EventArgs e)
+        {
+            ChatSendMessage();
+        }
+
+        private void btnSendWhisperMessage_Click(object sender, EventArgs e)
+        {
+            ChatSendWhisper();
+        }
     }
 }
