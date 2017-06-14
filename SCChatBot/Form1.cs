@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Windows.Forms;
 using Newtonsoft.Json.Linq;
 using WebSocketSharp;
@@ -87,12 +86,42 @@ namespace SCChatBot
                 {
                     var toonName = (string)msg["payload"]["toon_name"];
                     var user_id = (int)msg["payload"]["user_id"];
-                    MessageBox.Show(user_id.ToString());
+                    var results = new List<String>();
+
                     //JArray msgArray = JArray.Parse(e.ToString());
                     // var attribute = (string)msg["payload"]["attribute"];
                     //MessageBox.Show(attribute);
 
+                    var userNames = new Dictionary<string, int>();
+                    userNames.DictionaryAdd(toonName, user_id);
 
+
+                      
+                        // MessageBox.Show(String.Join("\n", results), "Results:", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, (MessageBoxOptions)0x40000);
+                    
+
+                   
+                  
+
+           /*         try
+                    {
+                        usernamesDataSet.Users.AddUsersRow(toonName, user_id);
+                       var updatedTable = usernamesDataSet.Users.GetChanges();
+
+                        var dataGrid = new DataGridView {DataSource = null};
+                        dataGrid.DataSource = usersBindingSource;
+                        
+                        dataGrid.Refresh();
+  
+                    }
+                    catch (Exception exception)
+                    {
+                        Console.WriteLine(exception);
+                        throw;
+                    }
+                    */
+                       
+                   
                     // var users = new List<string> { toonName };
 
                     Console.WriteLine(toonName + " has joined the channel");
@@ -251,5 +280,6 @@ namespace SCChatBot
         {
             ChatSendWhisper();
         }
+
     }
 }

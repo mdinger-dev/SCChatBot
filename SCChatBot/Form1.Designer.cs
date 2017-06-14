@@ -70,7 +70,7 @@ namespace SCChatBot
             // 
             // btnSendMessage
             // 
-            this.btnSendMessage.Location = new System.Drawing.Point(369, 191);
+            this.btnSendMessage.Location = new System.Drawing.Point(370, 295);
             this.btnSendMessage.Name = "btnSendMessage";
             this.btnSendMessage.Size = new System.Drawing.Size(130, 27);
             this.btnSendMessage.TabIndex = 4;
@@ -99,7 +99,7 @@ namespace SCChatBot
             // 
             // txtBoxChatMessage
             // 
-            this.txtBoxChatMessage.Location = new System.Drawing.Point(12, 195);
+            this.txtBoxChatMessage.Location = new System.Drawing.Point(7, 299);
             this.txtBoxChatMessage.MaxLength = 223;
             this.txtBoxChatMessage.Name = "txtBoxChatMessage";
             this.txtBoxChatMessage.Size = new System.Drawing.Size(353, 20);
@@ -140,7 +140,7 @@ namespace SCChatBot
             // 
             // txtBoxChatWhisperMessage
             // 
-            this.txtBoxChatWhisperMessage.Location = new System.Drawing.Point(12, 161);
+            this.txtBoxChatWhisperMessage.Location = new System.Drawing.Point(7, 259);
             this.txtBoxChatWhisperMessage.MaxLength = 223;
             this.txtBoxChatWhisperMessage.Name = "txtBoxChatWhisperMessage";
             this.txtBoxChatWhisperMessage.Size = new System.Drawing.Size(353, 20);
@@ -149,7 +149,7 @@ namespace SCChatBot
             // 
             // btnSendWhisperMessage
             // 
-            this.btnSendWhisperMessage.Location = new System.Drawing.Point(369, 158);
+            this.btnSendWhisperMessage.Location = new System.Drawing.Point(370, 255);
             this.btnSendWhisperMessage.Name = "btnSendWhisperMessage";
             this.btnSendWhisperMessage.Size = new System.Drawing.Size(130, 27);
             this.btnSendWhisperMessage.TabIndex = 8;
@@ -161,7 +161,7 @@ namespace SCChatBot
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(512, 230);
+            this.ClientSize = new System.Drawing.Size(512, 331);
             this.Controls.Add(this.btnSendWhisperMessage);
             this.Controls.Add(this.txtBoxChatWhisperMessage);
             this.Controls.Add(this.txtBoxChatMessage);
